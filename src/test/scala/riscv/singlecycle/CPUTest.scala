@@ -113,3 +113,17 @@ class ByteAccessTest extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
 }
+
+class SquareRootTest extends AnyFlatSpec with ChiselScalatestTester {
+  behavior.of("Single Cycle CPU")
+  it should "perform a square root with clz" in {
+    test(new TestTopModule("hw2_improved.asmbin")).withAnnotations(TestAnnotations.annos) { c =>
+      for (i <- 1 to 5000) {
+        c.clock.step()
+        c.io.mem_debug_read_address.poke((i * 4).U) // Avoid timeout
+      }
+      c.io.regs_debug_read_address.poke(18.U) // s2
+      c.io.regs_debug_read_data.expect(0x41b2e2acL.U)
+    }
+  }
+}
