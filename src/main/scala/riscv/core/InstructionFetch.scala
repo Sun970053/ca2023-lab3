@@ -25,7 +25,13 @@ class InstructionFetch extends Module {
   when(io.instruction_valid) {
     io.instruction := io.instruction_read_data
     // lab3(InstructionFetch) begin
-
+    when(io.jump_flag_id){
+      // if a jump is required, the pc is directed to the jump address
+      pc             := io.jump_address_id
+    }.otherwise {
+      // otherwise, it's incremented to pc + 4
+      pc             := pc + 4.U
+    }
     // lab3(InstructionFetch) end
 
   }.otherwise {
